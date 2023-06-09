@@ -1,6 +1,6 @@
 # TPredicate
 
-Use Case:
+Steps to add Package:
 
 Open Xcode
  - ProjectFile
