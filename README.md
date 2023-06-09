@@ -12,5 +12,7 @@ Usage:
  - import TPredicate
 
 let predicate = \A.name = "mahesh"
+
 let andPredicate = \A.name == "Maheshwaran" && \B.jobExp >= 1
+
 let orPredicate = \B.jobExp >= 1 || \B.isWorking == false
