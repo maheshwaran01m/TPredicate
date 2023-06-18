@@ -139,6 +139,10 @@ import SwiftData
 
 // MARK: - Compound operators
 
+@available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
+public prefix func ! <T>(value: KeyPath<T, Bool>) -> Predicate<T> {
+  value == false
+}
 
 // MARK: - Comparison operators
 
