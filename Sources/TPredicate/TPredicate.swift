@@ -89,7 +89,6 @@ public func >= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T?) -> NSPredicate {
 
 #if swift(>=5.9)
 import SwiftData
-#endif
 
 // MARK: - Compound operators
 
@@ -177,6 +176,7 @@ public func !=<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> wh
       rhs: PredicateExpressions.build_Arg(rhs))
   })
 }
+#endif
 
 // MARK: - Examples
 
