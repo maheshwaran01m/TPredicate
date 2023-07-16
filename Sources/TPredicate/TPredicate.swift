@@ -101,80 +101,80 @@ public prefix func ! <T>(value: KeyPath<T, Bool>) -> Predicate<T> {
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func ==<T: Equatable, E>(lhs: KeyPath<E, T>, rhs: T) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_Equal(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs))
-  })
+  }
 }
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func !=<T: Equatable, E>(lhs: KeyPath<E, T>, rhs: T) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_NotEqual(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs))
-  })
+  }
 }
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func < <T: Comparable, E>(lhs: KeyPath<E, T>, rhs: T) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_Comparison(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs),
       op: .lessThan)
-  })
+  }
 }
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func <= <T: Comparable, E>(lhs: KeyPath<E, T>, rhs: T) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_Comparison(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs),
       op: .lessThanOrEqual)
-  })
+  }
 }
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func > <T: Comparable, E>(lhs: KeyPath<E, T>, rhs: T) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_Comparison(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs),
       op: .greaterThan)
-  })
+  }
 }
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func >= <T: Comparable, E>(lhs: KeyPath<E, T>, rhs: T) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_Comparison(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs),
       op: .greaterThanOrEqual)
-  })
+  }
 }
 
 // MARK: Optional
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func ==<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_Equal(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs))
-  })
+  }
 }
 
 @available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
 public func !=<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> where T: Codable {
-  Predicate<E>({
+  Predicate<E> {
     PredicateExpressions.build_NotEqual(
       lhs: PredicateExpressions.build_KeyPath(root: PredicateExpressions.build_Arg($0), keyPath: lhs),
       rhs: PredicateExpressions.build_Arg(rhs))
-  })
+  }
 }
 #endif
 
