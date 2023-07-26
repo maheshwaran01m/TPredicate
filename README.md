@@ -11,8 +11,8 @@ Open Xcode
 Usage:
  - import TPredicate
 
-let predicate = \A.name = "mahesh"
+let predicate = \A.name == "mahesh"
 
-let andPredicate = \A.name == "Maheshwaran" && \B.jobExp >= 1
+let andPredicate = \A.name == "Maheshwaran" && \B.isWorking == true
 
-let orPredicate = \B.jobExp >= 1 || \B.isWorking == false
+let orPredicate = \B.projectInSwiftUI >= 1 || \B.isWorking != false
