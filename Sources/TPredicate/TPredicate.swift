@@ -229,10 +229,11 @@ public func !=<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> wh
 // MARK: - Examples
 
 /*
+ let equalTo = \A.name == "Mahesh"
  let notEqual = \A.name != "welcome"
  let notNil = \A.name != nil
  
- let andPredicate = \A.name == "Maheshwaran" && \B.isWorking == true
+ let andPredicate = \A.name == "Mahesh" && \B.isWorking == true
  let orPredicate = \B.projectExp > 1 || \B.isWorking == true
  
  let lessThanPredicate = \B.swiftUIExp < 1
