@@ -1,8 +1,7 @@
 
 // TPredicate.swift
 
-// Copyright (c) 2023 MAHESHWARAN (https://github.com/maheshwaran01m)
-
+// Copyright © 2023 MAHESHWARAN (https://github.com/maheshwaran01m)
 
 import Foundation
 import CoreData
@@ -19,6 +18,43 @@ public func || (a: NSPredicate, b: NSPredicate) -> NSPredicate {
 
 public prefix func ! (a: NSPredicate) -> NSPredicate {
   NSCompoundPredicate(notPredicateWithSubpredicate: a)
+}
+
+// MARK: - Optional Compound operators
+
+public prefix func ! (a: NSPredicate?) -> NSPredicate? {
+  guard let a else { return nil }
+  return NSCompoundPredicate(notPredicateWithSubpredicate: a)
+}
+
+public func && (a: NSPredicate?, b: NSPredicate?) -> NSPredicate? {
+  guard let a, let b else { return nil }
+  return NSCompoundPredicate(andPredicateWithSubpredicates: [a, b])
+}
+
+public func && (a: NSPredicate?, b: NSPredicate) -> NSPredicate? {
+  guard let a else { return b }
+  return NSCompoundPredicate(andPredicateWithSubpredicates: [a, b])
+}
+
+public func && (a: NSPredicate, b: NSPredicate?) -> NSPredicate? {
+  guard let b else { return a }
+  return NSCompoundPredicate(andPredicateWithSubpredicates: [a, b])
+}
+
+public func || (a: NSPredicate?, b: NSPredicate?) -> NSPredicate? {
+  guard let a, let b else { return nil }
+  return NSCompoundPredicate(orPredicateWithSubpredicates: [a, b])
+}
+
+public func || (a: NSPredicate?, b: NSPredicate) -> NSPredicate? {
+  guard let a else { return b }
+  return NSCompoundPredicate(orPredicateWithSubpredicates: [a, b])
+}
+
+public func || (a: NSPredicate, b: NSPredicate?) -> NSPredicate? {
+  guard let b else { return a }
+  return NSCompoundPredicate(orPredicateWithSubpredicates: [a, b])
 }
 
 // MARK: - Comparison operators
@@ -61,25 +97,37 @@ public func >= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
 
 // MARK: - Optional Comparison
 
-public func < <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T?) -> NSPredicate {
+public func == <T: Equatable, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+  NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
+                        rightExpression: NSExpression(forConstantValue: rhs),
+                        modifier: .direct, type: .equalTo)
+}
+
+public func != <T: Equatable, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+  NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
+                        rightExpression: NSExpression(forConstantValue: rhs),
+                        modifier: .direct, type: .notEqualTo)
+}
+
+public func < <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .lessThan)
 }
 
-public func <= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T?) -> NSPredicate {
+public func <= <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .lessThanOrEqualTo)
 }
 
-public func > <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T?) -> NSPredicate {
+public func > <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .greaterThan)
 }
 
-public func >= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T?) -> NSPredicate {
+public func >= <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .greaterThanOrEqualTo)
@@ -180,46 +228,25 @@ public func !=<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> wh
 
 // MARK: - Examples
 
-class A {
-  var name: String? = "Maheshwaran"
-}
-
-class B {
-  var job: String? = "iOS Developer"
-  var jobExp: Int = 1
-  var isWorking: Bool = true
-}
-
-public struct TPredicate {
-  public init() {}
-  
-  public let predicate = \A.name == "Maheshwaran"
-}
-
-extension TPredicate {
-  
-  private func examples() {
-    
-    //    MARK: - Valid Predicate
-    /*
-     let notEqual = \A.name != "welcome"
-     let notNil = \A.name != nil
-     
-     let andPredicate = \A.name == "Maheshwaran" && \B.jobExp >= 1
-     let orPredicate = \B.jobExp >= 1 || \B.isWorking == false
-     
-     let lessThanPredicate = \B.jobExp < 1
-     let greaterThanPredicate = \B.jobExp >= 2
-     
-     //  MARK: Invalid Predicate Error
-     //   Compile Error - Binary operator '==' cannot be applied to operands of type 'ReferenceWritableKeyPath<B, String?>' and 'Int'
-     let invalidPredicate = \B.job == 0
-     
-     //  Compile Error - Binary operator '<' cannot be applied to operands of type 'ReferenceWritableKeyPath<B, Int>' and 'String'
-     private let invalidLessThanPredicate = \B.jobExp < "Mahesh"
-     
-     // Compile Error - Cannot convert value of type 'String' to expected argument type 'Bool'
-     let inValideOrPredicate = \B.jobExp >= 1 || \B.isWorking == "false"
-     */
-  }
-}
+/*
+ let notEqual = \A.name != "welcome"
+ let notNil = \A.name != nil
+ 
+ let andPredicate = \A.name == "Maheshwaran" && \B.isWorking == true
+ let orPredicate = \B.projectExp > 1 || \B.isWorking == true
+ 
+ let lessThanPredicate = \B.swiftUIExp < 1
+ let greaterThanPredicate = \B.jobExp > 1
+ 
+ //  MARK: Invalid Predicate Error
+ 
+ //   Compile Error - Binary operator '==' cannot be applied to operands of type 'ReferenceWritableKeyPath<B, String?>' and 'Int'
+ let invalidPredicate = \B.job == 0
+ 
+ //  Compile Error - Binary operator '<' cannot be applied to operands of type 'ReferenceWritableKeyPath<B, Int>' and 'String'
+ private let invalidLessThanPredicate = \B.jobExp < "Mahesh"
+ 
+ // Compile Error - Cannot convert value of type 'String' to expected argument type 'Bool'
+ let inValideOrPredicate = \B.jobExp >= 1 || \B.isWorking == "false"
+ 
+ */
