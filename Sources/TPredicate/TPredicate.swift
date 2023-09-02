@@ -4,6 +4,8 @@
 // Copyright © 2023 MAHESHWARAN (https://github.com/maheshwaran01m)
 
 import Foundation
+
+#if canImport(CoreData)
 import CoreData
 
 // MARK: - Compound operators
@@ -59,37 +61,37 @@ public func || (a: NSPredicate, b: NSPredicate?) -> NSPredicate? {
 
 // MARK: - Comparison operators
 
-public func == <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
+public func == <T: Equatable>(lhs: KeyPath<some NSManagedObject, T>, rhs: T) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .equalTo)
 }
 
-public func != <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
+public func != <T: Equatable>(lhs: KeyPath<some NSManagedObject, T>, rhs: T) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .notEqualTo)
 }
 
-public func < <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
+public func < <T: Equatable>(lhs: KeyPath<some NSManagedObject, T>, rhs: T) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .lessThan)
 }
 
-public func <= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
+public func <= <T: Equatable>(lhs: KeyPath<some NSManagedObject, T>, rhs: T) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .lessThanOrEqualTo)
 }
 
-public func > <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
+public func > <T: Equatable>(lhs: KeyPath<some NSManagedObject, T>, rhs: T) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .greaterThan)
 }
 
-public func >= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
+public func >= <T: Equatable>(lhs: KeyPath<some NSManagedObject, T>, rhs: T) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .greaterThanOrEqualTo)
@@ -97,45 +99,46 @@ public func >= <T: Equatable, K>(lhs: KeyPath<K, T>, rhs: T) -> NSPredicate {
 
 // MARK: - Optional Comparison
 
-public func == <T: Equatable, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+public func == <T: Equatable>(lhs: KeyPath<some NSManagedObject, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .equalTo)
 }
 
-public func != <T: Equatable, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+public func != <T: Equatable>(lhs: KeyPath<some NSManagedObject, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .notEqualTo)
 }
 
-public func < <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+public func < <T>(lhs: KeyPath<some NSManagedObject, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .lessThan)
 }
 
-public func <= <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+public func <= <T>(lhs: KeyPath<some NSManagedObject, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .lessThanOrEqualTo)
 }
 
-public func > <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+public func > <T>(lhs: KeyPath<some NSManagedObject, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .greaterThan)
 }
 
-public func >= <T, K>(lhs: KeyPath<K, T?>, rhs: T?) -> NSPredicate {
+public func >= <T>(lhs: KeyPath<some NSManagedObject, T?>, rhs: T?) -> NSPredicate {
   NSComparisonPredicate(leftExpression: NSExpression(forKeyPath: lhs),
                         rightExpression: NSExpression(forConstantValue: rhs),
                         modifier: .direct, type: .greaterThanOrEqualTo)
 }
+#endif
 
 // MARK: - Swift Data
 
-#if swift(>=5.9)
+#if swift(>=5.9) && canImport(SwiftData)
 import SwiftData
 
 // MARK: - Compound operators
@@ -224,6 +227,17 @@ public func !=<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> wh
       rhs: PredicateExpressions.build_Arg(rhs))
   }
 }
+
+@available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
+private func && <T>(lhs: Predicate<T>, rhs: Predicate<T>) -> Predicate<T> where T: Codable {
+  return lhs
+}
+
+@available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
+private func || <T>(lhs: Predicate<T>, rhs: Predicate<T>) -> Predicate<T> where T: Codable {
+  return lhs
+}
+
 #endif
 
 // MARK: - Examples
