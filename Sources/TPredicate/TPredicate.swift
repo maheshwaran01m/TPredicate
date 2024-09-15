@@ -228,14 +228,14 @@ public func !=<T: Equatable, E>(lhs: KeyPath<E, T?>, rhs: T?) -> Predicate<E> wh
   }
 }
 
-@available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
-private func && <T>(lhs: Predicate<T>, rhs: Predicate<T>) -> Predicate<T> where T: Codable {
-  return lhs
+@available(macOS 14.4, iOS 17.4, tvOS 17.4, watchOS 10.4, *)
+public func && <T>(lhs: Predicate<T>, rhs: Predicate<T>) -> Predicate<T> where T: Codable {
+  #Predicate<T> { lhs.evaluate($0) && rhs.evaluate($0) }
 }
 
-@available(macOS 14, iOS 17, tvOS 17, watchOS 10, *)
-private func || <T>(lhs: Predicate<T>, rhs: Predicate<T>) -> Predicate<T> where T: Codable {
-  return lhs
+@available(macOS 14.4, iOS 17.4, tvOS 17.4, watchOS 10.4, *)
+public func || <T>(lhs: Predicate<T>, rhs: Predicate<T>) -> Predicate<T> where T: Codable {
+  #Predicate<T> { lhs.evaluate($0) || rhs.evaluate($0) }
 }
 
 #endif
